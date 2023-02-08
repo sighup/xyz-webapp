@@ -1,0 +1,60 @@
+name: base-ci
+
+on:
+  pull_request:
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - hook_id: check-added-large-files
+          - hook_id: check-merge-conflict
+          - hook_id: check-shebang-scripts-are-executable
+          - hook_id: check-symlinks
+          - hook_id: check-yaml
+          - hook_id: mixed-line-ending
+          - hook_id: trailing-whitespace
+
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
+
+      - name: Get changed files
+        id: file_changes
+        run: |
+          export DIFF=$(git diff --name-only origin/${{ github.base_ref }} ${{ github.sha }})
+          echo "Diff between ${{ github.base_ref }} and ${{ github.sha }}"
+          echo "::set-output name=files::$( echo "$DIFF" | xargs echo )" >> $GITHUB_OUTPUT
+
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - uses: cloudposse/github-action-pre-commit@v3.0.0
+        with:
+          extra_args: ${{ matrix.hook_id }} --color=always --files ${{ steps.file_changes.outputs.files }}
+
+  unit-testing:
+    runs-on: ubuntu-latest
+    name: Unit Testing
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          working-directory: src
+          ruby-version: 3.1
+          bundler-cache: true
+      - run: cd src; bundle exec rspec ../test --format documentation
+        name: Run Tests

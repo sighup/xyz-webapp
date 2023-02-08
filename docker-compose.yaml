@@ -1,0 +1,9 @@
+version: "1.0"
+services:
+  app:
+    build: .
+    image: "webapp:latest"
+    environment:
+      PORT: 3001
+    ports:
+      - "3001:3001"
