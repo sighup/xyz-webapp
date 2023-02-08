@@ -2,7 +2,7 @@ version: "1.0"
 services:
   app:
     build: .
-    image: "webapp:latest"
+    image: "xyz-webapp:latest"
     environment:
       PORT: 3001
     ports:
