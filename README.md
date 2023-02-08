@@ -1,4 +1,4 @@
-# WebApp
+# XYZ WebApp
 A simple Sinatra WebApp example
 
 ### Run it from source with pre-requisites
@@ -14,10 +14,10 @@ bundle exec rackup --host 0.0.0.0 --port 4567
 ### Build and run as a container:
 #### Build
 ```
-docker build --tag app .
+docker build --tag xyz-webapp .
 ```
 #### Run
 ```
-docker run -d -p 3001:3001 -e PORT=3001 app:latest
+docker run -d -p 3001:3001 -e PORT=3001 xyz-webapp:latest
 ```
 Alternatively, edit the docker compose configuration to your liking and `docker compose up`.
