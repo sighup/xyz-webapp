@@ -5,12 +5,8 @@
 replicaCount: 1
 
 image:
-  repository: sighup/webapp
+  repository: ghcr.io/sighup/xyz-webapp
   pullPolicy: Always
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
-
-  repository: ghcr.io/sighup/webapp
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
 
