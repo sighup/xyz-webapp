@@ -80,6 +80,7 @@ jobs:
         id: chart_version
 
       - run: |
+          echo "sed -i "s/^version:.*$/version: {{ github.event.ref }}/" deploy/helm/${{ matrix.project }}/Chart.yaml"
           echo "sed -i "s/^appVersion:.*$/appVersion: {{ github.event.ref }}/" deploy/helm/${{ matrix.project }}/Chart.yaml"
         if: github.event.ref_type == 'tag' && startsWith(github.ref, 'refs/tags/v')
        
