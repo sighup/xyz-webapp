@@ -96,7 +96,8 @@ jobs:
         with:
           name: xyz-webapp
           repository: sighup/charts
-          tag: ${{ steps.chart_release_version.outputs.VERSION }}
+          tag: ${{ env.VERSION }}
+          #tag: ${{ steps.chart_release_version.outputs.VERSION }}
           path: deploy/helm/${{ matrix.project }}
           registry: ghcr.io
           registry_username: ${{ github.actor }}
