@@ -81,10 +81,12 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Chart | Versions
-        if: github.event.ref_type == 'tag' && startsWith(github.ref, 'refs/tags/v')
+        if: github.ref_type == 'tag' && startsWith(github.ref_name, 'v')
         run: |
-          echo "sed -i "s/^version:.*$/version: ${{ github.event.ref }}/" deploy/helm/${{ matrix.project }}/Chart.yaml"
-          echo "sed -i "s/^appVersion:.*$/appVersion: ${{ github.event.ref }}/" deploy/helm/${{ matrix.project }}/Chart.yaml"
+          tag="${GITHUB_REF_NAME}"
+          VERSION="${tag#v}"
+          echo "sed -i "s/^version:.*$/version: $VERSION/" deploy/helm/${{ matrix.project }}/Chart.yaml"
+          echo "sed -i "s/^appVersion:.*$/appVersion: ${{ github.ref_name }}/" deploy/helm/${{ matrix.project }}/Chart.yaml"
 
       - run: |
           echo "::set-output name=VERSION::$(helm inspect chart deploy/helm/${{ matrix.project }} | grep ^version | cut -d' ' -f2)"
@@ -100,4 +102,3 @@ jobs:
           registry: ghcr.io
           registry_username: ${{ github.actor }}
           registry_password: ${{ secrets.GITHUB_TOKEN }}
-
