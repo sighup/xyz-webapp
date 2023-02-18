@@ -88,7 +88,8 @@ jobs:
           echo "sed -i "s/^version:.*$/version: $VERSION/" deploy/helm/${{ matrix.project }}/Chart.yaml"
           echo "sed -i "s/^appVersion:.*$/appVersion: ${{ github.ref_name }}/" deploy/helm/${{ matrix.project }}/Chart.yaml"
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
-      
+        id: chart_version
+  
       - name: Chart | Version
         if: github.ref_type == 'branch'
         run: |        
