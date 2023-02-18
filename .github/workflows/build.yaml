@@ -87,6 +87,8 @@ jobs:
           VERSION="${tag#v}"
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
           sed -i 's/^version:.*$/version: $VERSION/;s/^appVersion:.*$/appVersion: $GITHUB_REF_NAME/' deploy/helm/${{ matrix.project }}/Chart.yaml
+          echo "version: $VERSION"
+          echo "appVersion: $GITHUB_REF_NAME"
           helm inspect chart deploy/helm/${{ matrix.project }} | grep ^version | cut -d' ' -f2
           helm inspect chart deploy/helm/${{ matrix.project }} | grep ^appVersion | cut -d' ' -f2
         id: chart_release_version
@@ -96,8 +98,7 @@ jobs:
         with:
           name: xyz-webapp
           repository: sighup/charts
-          tag: ${{ env.VERSION }}
-          #tag: ${{ steps.chart_release_version.outputs.VERSION }}
+          tag: ${{ steps.chart_release_version.outputs.VERSION }}
           path: deploy/helm/${{ matrix.project }}
           registry: ghcr.io
           registry_username: ${{ github.actor }}
