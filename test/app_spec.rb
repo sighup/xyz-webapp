@@ -14,6 +14,6 @@ RSpec.describe 'App' do
   it "Responds with correct message" do
     get '/'
     expect(last_response).to be_ok
-    expect(JSON.parse(last_response.body)).to eq({ "message" => "Automate all the things!", "timestamp" => Time.now.to_i })
+    expect(JSON.parse(last_response.body)).to eq({ "message" => "Automate many of the things!", "timestamp" => Time.now.to_i })
   end
 end
